@@ -60,12 +60,36 @@
     #stopBtn:hover {
       background-color: #dc2626;
     }
+
+    select {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      font-size: 1rem;
+      width: 100%;
+      border: 1px solid #d1d5db;
+    }
+
+    label {
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: block;
+      text-align: left;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🎹 Piano Practice Tracker</h1>
     <div class="timer" id="timerDisplay">00:00</div>
+
+    <label for="practiceType">Practice Type</label>
+    <select id="practiceType">
+      <option value="Scales / Technical">Scales / Technical</option>
+      <option value="Song Practice">Song Practice</option>
+      <option value="Lessons">Lessons</option>
+    </select>
+
     <button id="startBtn">Start</button>
     <button id="stopBtn" disabled>Stop</button>
   </div>
@@ -79,6 +103,7 @@
     const timerDisplay = document.getElementById('timerDisplay');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
+    const practiceTypeSelect = document.getElementById('practiceType');
 
     function updateTimerDisplay() {
       const now = new Date();
@@ -105,13 +130,15 @@
       const formatDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
       const notes = prompt("What did you practice?", "");
+      const practiceType = practiceTypeSelect.value;
 
       submitPracticeLog({
         date: formatDate(startTime),
         start: formatTime(startTime),
         end: formatTime(endTime),
         duration: durationMin,
-        notes: notes || ''
+        notes: notes || '',
+        practiceType
       });
 
       alert("✅ Practice logged!");
@@ -120,7 +147,7 @@
       stopBtn.disabled = true;
     });
 
-    function submitPracticeLog({ date, start, end, duration, notes }) {
+    function submitPracticeLog({ date, start, end, duration, notes, practiceType }) {
       const formURL = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeobztPmlteVUamqVlA93Nm3dGfdEuvEWWfxhR73vHqEl0iGA/formResponse';
 
       const form = document.createElement('form');
@@ -134,6 +161,7 @@
         'entry.1573943102': end,
         'entry.1972265357': duration,
         'entry.379824091': notes,
+        'entry.1231776069': practiceType // <== Replace with your actual entry ID for practice type
       };
 
       for (const key in data) {
@@ -145,8 +173,10 @@
       }
 
       document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
+      setTimeout(() => {
+        form.submit();
+        document.body.removeChild(form);
+      }, 100);
     }
   </script>
 </body>
