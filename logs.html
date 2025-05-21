@@ -5,22 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Practice Log</title>
   <style>
-   
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a; /* dark slate background */
+      color: white;
+      padding: 1rem;
+    }
+
     h1 {
       text-align: center;
       margin-bottom: 2rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-      border-radius: 1rem;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+      font-size: 2rem;
+      color: #facc15; /* yellow-400 */
     }
 
-    button {
-      margin: 0.5rem;
+    .back-button {
+      background-color: #3b82f6; /* blue-500 */
+      color: white;
+      margin-bottom: 1.5rem;
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
       border: none;
@@ -28,37 +30,57 @@
       cursor: pointer;
       transition: background-color 0.2s ease-in-out;
     }
-    tr:hover {
-      background-color: #f9fafb;
+
+    .back-button:hover {
+      background-color: #2563eb; /* blue-600 */
     }
 
-        /* Wrap table in a responsive container */
     .table-container {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
     }
-    
-    /* Make fonts and padding responsive */
-    body {
-      font-size: 16px;
-      padding: 1rem;
-    }
-    
+
     table {
-      min-width: 600px; /* ensures table is wide enough, triggers scroll on small screens */
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      background-color: white;
+      color: #1e293b; /* slate-800 */
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
     }
-    
-    /* Adjust font-size and padding on small devices */
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0; /* gray-200 */
+    }
+
+    th {
+      background-color: #f1f5f9; /* slate-100 */
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: #f8fafc; /* slate-50 */
+    }
+
     @media (max-width: 600px) {
       body {
         font-size: 14px;
         padding: 0.5rem;
       }
+
       th, td {
         padding: 0.5rem;
       }
-    }
 
+      .back-button {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
