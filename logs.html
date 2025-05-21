@@ -19,6 +19,10 @@
       color: #09779C; /* blue */
     }
 
+    p {
+      color: 000000
+    }
+
     .back-button {
       background-color: #3b82f6; /* blue-500 */
       color: white;
@@ -166,8 +170,8 @@
     });
 
     document.getElementById('weeklyTotal').textContent = 
-      `🕒 Practice Time (Last 7 Days): ${total.toFixed(1)} minutes`;
-  }
+      `🕒 Practice Time (Last 7 Days): ${(total / 60).toFixed(2)} hours`
+    }
 
   // Load and parse the CSV
   Papa.parse(csvUrl, {
