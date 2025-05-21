@@ -97,8 +97,8 @@
 <div class="button-container">
   <button class="back-button" onclick="location.href='index.html'">← Back to Timer</button>
 </div>  <h1>🎹 Practice Sessions</h1>
-  <p id="weeklyTotal" style="text-align: center; font-size: 1.25rem; margin-bottom: 1rem;">
-  Loading this week's total practice time...
+  <p id="weeklyTotal" style="text-align: center; font-size: 1.25rem; margin-bottom: 1rem; color: #000">
+    Loading this week's total practice time...
   </p>
   <div class = "table-container">
     <table>
@@ -170,7 +170,7 @@
     });
 
     document.getElementById('weeklyTotal').textContent = 
-      `🕒 Practice Time (Last 7 Days): ${(total / 60).toFixed(2)} hours`
+      `🕒 Practice Time (Last 7 Days): ${(total / 60).toFixed(1)} hours`
     }
 
   // Load and parse the CSV
