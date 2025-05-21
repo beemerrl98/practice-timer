@@ -56,6 +56,7 @@
   <table>
     <thead>
       <tr>
+        <th>Timestamp</th>
         <th>Date</th>
         <th>Start</th>
         <th>End</th>
@@ -79,6 +80,7 @@
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${row['Timestamp']}</td>
+          <td>${row['Date']}</td>
           <td>${row['Start']}</td>
           <td>${row['End']}</td>
           <td>${row['Duration']}</td>
