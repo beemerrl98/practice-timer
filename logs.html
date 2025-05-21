@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Practice Log</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fafb;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f3f4f6;
+    }
+
+    tr:hover {
+      background-color: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎹 Practice Sessions</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Duration (min)</th>
+        <th>Notes</th>
+        <th>Practice Type</th>
+      </tr>
+    </thead>
+    <tbody id="logBody">
+      <!-- Filled dynamically -->
+    </tbody>
+  </table>
+
+  <script src="https://unpkg.com/tabletop@1.6.1/tabletop.js"></script>
+  <script>
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRt68Glgn4iFLRzikBKVOiZbKmGguMcUnOji-c-xU44HYwiZCUAv1Yh54N_6Lnvi0FtrwIt_PeIkUvo/pubhtml?gid=832075045&single=true';
+
+    function showData(data) {
+      const tbody = document.getElementById('logBody');
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row['Date']}</td>
+          <td>${row['Start']}</td>
+          <td>${row['End']}</td>
+          <td>${row['Duration']}</td>
+          <td>${row['Notes']}</td>
+          <td>${row['Practice Type']}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      Tabletop.init({
+        key: sheetURL,
+        callback: showData,
+        simpleSheet: true
+      });
+    });
+  </script>
+</body>
+</html>
