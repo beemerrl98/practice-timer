@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #0f172a; /* dark slate background */
+      background-color: #FFFFFF; /* white background */
       color: white;
       padding: 1rem;
     }
@@ -16,7 +16,7 @@
       text-align: center;
       margin-bottom: 2rem;
       font-size: 2rem;
-      color: #facc15; /* yellow-400 */
+      color: #09779C; /* blue */
     }
 
     .back-button {
@@ -29,6 +29,12 @@
       border-radius: 0.5rem;
       cursor: pointer;
       transition: background-color 0.2s ease-in-out;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
     }
 
     .back-button:hover {
@@ -84,8 +90,9 @@
   </style>
 </head>
 <body>
-  <button onclick="location.href='index.html'" style="margin-bottom: 20px;">Back to Timer</button>
-  <h1>🎹 Practice Sessions</h1>
+<div class="button-container">
+  <button class="back-button" onclick="location.href='index.html'">← Back to Timer</button>
+</div>  <h1>🎹 Practice Sessions</h1>
   <div class = "table-container">
     <table>
       <thead>
