@@ -84,7 +84,8 @@
     <div class="timer" id="timerDisplay">00:00</div>
 
     <label for="practiceType">Practice Type</label>
-    <select id="practiceType">
+    <select id="practiceType" required>
+      <option value="" disabled selected>Select type...</option>
       <option value="Scales / Technical">Scales / Technical</option>
       <option value="Song Practice">Song Practice</option>
       <option value="Lessons">Lessons</option>
@@ -114,10 +115,16 @@
     }
 
     startBtn.addEventListener('click', () => {
+      if (!practiceTypeSelect.value) {
+        alert("Please select a practice type before starting.");
+        return;
+      }
+
       startTime = new Date();
       timerInterval = setInterval(updateTimerDisplay, 1000);
       startBtn.disabled = true;
       stopBtn.disabled = false;
+      practiceTypeSelect.disabled = true;
     });
 
     stopBtn.addEventListener('click', () => {
@@ -145,6 +152,8 @@
       timerDisplay.textContent = "00:00";
       startBtn.disabled = false;
       stopBtn.disabled = true;
+      practiceTypeSelect.disabled = false;
+      practiceTypeSelect.value = "";
     });
 
     function submitPracticeLog({ date, start, end, duration, notes, practiceType }) {
@@ -161,7 +170,7 @@
         'entry.1573943102': end,
         'entry.1972265357': duration,
         'entry.379824091': notes,
-        'entry.1231776069': practiceType // <== Replace with your actual entry ID for practice type
+        'entry.1231776069': practiceType // ✅ Your new field
       };
 
       for (const key in data) {
