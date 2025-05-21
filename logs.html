@@ -72,7 +72,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tabletop@1.6.1/tabletop.min.js"></script>
   <script>
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRt68Glgn4iFLRzikBKVOiZbKmGguMcUnOji-c-xU44HYwiZCUAv1Yh54N_6Lnvi0FtrwIt_PeIkUvo/pubhtml?gid=832075045&single=true';
+    const sheetKey = '1PB7BX4KVVAd7WgLLjdJllnwEcLVbpn4zrRljmA72D-c';
 
     function showData(data) {
       const tbody = document.getElementById('logBody');
@@ -93,7 +93,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       Tabletop.init({
-        key: sheetURL,
+        key: sheetKey,
         callback: showData,
         simpleSheet: true
       });
