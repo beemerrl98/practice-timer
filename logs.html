@@ -97,6 +97,7 @@
 <div class="button-container">
   <button class="back-button" onclick="location.href='index.html'">← Back to Timer</button>
 </div>  <h1>🎹 Practice Sessions</h1>
+  <h2 style="text-align: center;" id="summary">🕒 Practice Time (Last 7 Days): ...</h2>
   <p id="weeklyTotal" style="text-align: center; font-size: 1.25rem; margin-bottom: 1rem; color: #000">
     Loading this week's total practice time...
   </p>
@@ -125,7 +126,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-      const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRt68Glgn4iFLRzikBKVOiZbKmGguMcUnOji-c-xU44HYwiZCUAv1Yh54N_6Lnvi0FtrwIt_PeIkUvo/pub?output=csv';
+     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRt68Glgn4iFLRzikBKVOiZbKmGguMcUnOji-c-xU44HYwiZCUAv1Yh54N_6Lnvi0FtrwIt_PeIkUvo/pub?output=csv';
 
   function renderTable(data) {
     const tbody = document.getElementById('logBody');
@@ -162,10 +163,17 @@
         return dateStr && !isNaN(duration) && new Date(dateStr) >= last7Days;
       });
 
-      // Render the filtered data in the table
+      // Render filtered data in table
       renderTable(filteredRows);
 
-      // Group durations by Practice Type
+      // === 1. Display total duration ===
+      const totalMinutes = filteredRows.reduce((sum, row) => {
+        return sum + (parseFloat(row['Duration']) || 0);
+      }, 0);
+      const totalHours = (totalMinutes / 60).toFixed(1);
+      document.getElementById('summary').textContent = `🕒 Practice Time (Last 7 Days): ${totalHours} hours`;
+
+      // === 2. Group by Practice Type for pie chart ===
       const practiceMap = {};
       filteredRows.forEach(row => {
         const type = row['Practice Type'] || 'Unspecified';
@@ -176,7 +184,6 @@
       const labels = Object.keys(practiceMap);
       const values = Object.values(practiceMap);
 
-      // Draw pie chart
       new Chart(document.getElementById('practiceChart'), {
         type: 'pie',
         data: {
@@ -194,9 +201,7 @@
         options: {
           responsive: true,
           plugins: {
-            legend: {
-              position: 'bottom'
-            },
+            legend: { position: 'bottom' },
             tooltip: {
               callbacks: {
                 label: function(context) {
