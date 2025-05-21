@@ -100,6 +100,7 @@
   <p id="weeklyTotal" style="text-align: center; font-size: 1.25rem; margin-bottom: 1rem; color: #000">
     Loading this week's total practice time...
   </p>
+  <canvas id="practiceChart" width="400" height="400" style="max-width: 500px; margin: auto;"></canvas>
   <div class = "table-container">
     <table>
       <thead>
@@ -121,15 +122,14 @@
 
   <!-- PapaParse CDN -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-  // Published Google Sheet CSV URL
-  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRt68Glgn4iFLRzikBKVOiZbKmGguMcUnOji-c-xU44HYwiZCUAv1Yh54N_6Lnvi0FtrwIt_PeIkUvo/pub?output=csv';
+      const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRt68Glgn4iFLRzikBKVOiZbKmGguMcUnOji-c-xU44HYwiZCUAv1Yh54N_6Lnvi0FtrwIt_PeIkUvo/pub?output=csv';
 
-  // Render table rows
   function renderTable(data) {
     const tbody = document.getElementById('logBody');
-    tbody.innerHTML = ''; // Clear old rows
+    tbody.innerHTML = '';
 
     data.forEach(row => {
       const tr = document.createElement('tr');
@@ -146,41 +146,69 @@
     });
   }
 
-  // Calculate total practice time from the last 7 days
-  function displayWeeklyTotal(data) {
-    const now = new Date();
-    const sevenDaysAgo = new Date(now);
-    sevenDaysAgo.setDate(now.getDate() - 6); // includes today
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-
-    let total = 0;
-
-    data.forEach(row => {
-      const dateStr = row['Date'];
-      const durationStr = row['Duration'];
-
-      if (dateStr && durationStr) {
-        const parsedDate = new Date(dateStr);
-        parsedDate.setHours(0, 0, 0, 0);
-
-        if (parsedDate >= sevenDaysAgo && parsedDate <= now && !isNaN(Number(durationStr))) {
-          total += parseFloat(durationStr);
-        }
-      }
-    });
-
-    document.getElementById('weeklyTotal').textContent = 
-      `🕒 Practice Time (Last 7 Days): ${(total / 60).toFixed(1)} hours`
-    }
-
-  // Load and parse the CSV
   Papa.parse(csvUrl, {
     download: true,
     header: true,
     complete: function(results) {
       const data = results.data;
-      renderTable(data);
-      displayWeeklyTotal(data);
+      const now = new Date();
+      const last7Days = new Date(now);
+      last7Days.setDate(now.getDate() - 7);
+
+      // Filter entries from last 7 days with valid duration
+      const filteredRows = data.filter(row => {
+        const dateStr = row['Date'];
+        const duration = parseFloat(row['Duration']);
+        return dateStr && !isNaN(duration) && new Date(dateStr) >= last7Days;
+      });
+
+      // Render the filtered data in the table
+      renderTable(filteredRows);
+
+      // Group durations by Practice Type
+      const practiceMap = {};
+      filteredRows.forEach(row => {
+        const type = row['Practice Type'] || 'Unspecified';
+        const duration = parseFloat(row['Duration']) || 0;
+        practiceMap[type] = (practiceMap[type] || 0) + duration;
+      });
+
+      const labels = Object.keys(practiceMap);
+      const values = Object.values(practiceMap);
+
+      // Draw pie chart
+      new Chart(document.getElementById('practiceChart'), {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Minutes Practiced',
+            data: values,
+            backgroundColor: [
+              '#60A5FA', '#FBBF24', '#34D399', '#F472B6', '#A78BFA', '#F87171', '#FDBA74'
+            ],
+            borderColor: '#fff',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const minutes = context.raw;
+                  const hours = (minutes / 60).toFixed(1);
+                  return `${context.label}: ${hours} hrs (${minutes} min)`;
+                }
+              }
+            }
+          }
+        }
+      });
     },
     error: function(err) {
       console.error('Error loading CSV:', err);
